@@ -23,7 +23,8 @@ android {
     }
 
     androidResources {
-        // The database is opened in place by SQLite; it must not be deflated.
+        // Keeps the database uncompressed in this module's own test APK. The library
+        // streams the asset to a file before opening it, so consumers may compress it.
         noCompress += "db"
     }
 
