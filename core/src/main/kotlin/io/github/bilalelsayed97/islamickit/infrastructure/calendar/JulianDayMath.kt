@@ -59,7 +59,12 @@ internal object JulianDayMath {
         return CivilDate(cc - 4716, month, day)
     }
 
-    /** Hijri date -> CJDN (pure arithmetic, used by every `hToG`). */
+    /**
+     * Hijri date -> CJDN (pure arithmetic: the tabular calendar). Only correct
+     * for the mathematical method; a table-driven method must use [tableToJd],
+     * or its two directions disagree wherever the observed month start differs
+     * from the tabular one.
+     */
     fun hijriToJd(year: Int, month: Int, day: Int, adjust: Int = 0): Int {
         return ((11 * year + 3) / 30) +
             354 * year +
@@ -87,6 +92,21 @@ internal object JulianDayMath {
             day = mcjdn - data[i - 1] + 1,
             monthLength = data[i] - data[i - 1],
         )
+    }
+
+    /**
+     * Hijri date -> CJDN via the lunation-start table: the exact inverse of
+     * [tableToHijri]. A [day] past the month's end runs on into the next month,
+     * as date overflow does everywhere else. `null` when the month is outside
+     * the table.
+     */
+    fun tableToJd(data: IntArray, lunations: Int, year: Int, month: Int, day: Int): Int? {
+        // tableToHijri numbers the lunation that starts at data[i] as
+        // i + 1 + lunations, and lunation n is month ((n - 1) mod 12) + 1 of
+        // year ((n - 1) div 12) + 1.
+        val index = (year - 1) * 12 + month - 1 - lunations
+        if (index !in data.indices) return null
+        return data[index] + day - 1 + 2400000
     }
 
     /** CJDN -> Hijri via the pure arithmetic (tabular) algorithm (month length not tracked). */

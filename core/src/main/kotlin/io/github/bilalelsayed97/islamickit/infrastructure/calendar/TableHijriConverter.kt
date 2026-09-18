@@ -21,9 +21,17 @@ private fun dartRecord(year: Int, month: Int, day: Int): String = "($year, $mont
 private fun encode(year: Int, month: Int, day: Int): Int = year * 10000 + month * 100 + day
 
 /**
- * Table-driven converter (Umm al-Qura, Diyanet). `gToH` is a lunation-table
- * lookup; `hToG` uses the arithmetic Hijri->JD path, exactly as the PHP
- * (the table is not consulted and `adjustment` is applied).
+ * Table-driven converter (Umm al-Qura, Diyanet). Both directions read the same
+ * lunation table, so they are exact inverses: `toGregorian(fromGregorian(d))`
+ * is `d` for every date in range.
+ *
+ * (The PHP original converts Hijri -> Gregorian with the arithmetic calendar
+ * instead, which lands a day or two off whenever the observed month start
+ * differs from the tabular one. That is a defect, not a convention, and is not
+ * reproduced here.)
+ *
+ * `adjustment` shifts the result of [toGregorian] by whole days. It has no
+ * effect on [fromGregorian], as in the original.
  */
 class TableHijriConverter internal constructor(
     override val method: CalendarMethod,
@@ -58,11 +66,13 @@ class TableHijriConverter internal constructor(
         if (v < encode(hijriFrom.year, hijriFrom.month, hijriFrom.day) ||
             v > encode(hijriTo.year, hijriTo.month, hijriTo.day)
         ) {
-            throw IllegalArgumentException(
-                "Hijri date out of range for ${method.code} ($hijriFrom .. $hijriTo).",
-            )
+            throw hijriOutOfRange()
         }
     }
+
+    private fun hijriOutOfRange() = IllegalArgumentException(
+        "Hijri date out of range for ${method.code} ($hijriFrom .. $hijriTo).",
+    )
 
     override fun fromGregorian(date: CivilDate, adjustment: Int): HijriDate {
         verifyGregorian(date)
@@ -80,8 +90,10 @@ class TableHijriConverter internal constructor(
 
     override fun toGregorian(year: Int, month: Int, day: Int, adjustment: Int): CivilDate {
         verifyHijri(year, month, day)
-        val jd = JulianDayMath.hijriToJd(year, month, day, adjust = adjustment)
-        return JulianDayMath.jdToGregorian(jd)
+        // A month number outside 1..12 can pass the bounds check above yet
+        // point past the table.
+        val jd = JulianDayMath.tableToJd(data, lunations, year, month, day) ?: throw hijriOutOfRange()
+        return JulianDayMath.jdToGregorian(jd + adjustment)
     }
 
     companion object {
