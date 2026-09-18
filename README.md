@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="doc/header-dark.svg">
+    <img alt="islamic_kit_plus" src="doc/header.svg" width="720">
+  </picture>
+</p>
+
 # islamic_kit_android
 
 Native Kotlin port of [`islamic_kit_plus`](https://github.com/bilalelsayed97/islamic_kit_plus):
