@@ -1,0 +1,22 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+.kotlin/
+
+# Local configuration (SDK path, signing, machine-specific JDK)
+local.properties
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+.DS_Store
+
+# Databases: the templates ignore *.db, but the bundled city database is a
+# committed asset of the :geocoding module.
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+!geocoding/src/main/assets/prayer_times.db
