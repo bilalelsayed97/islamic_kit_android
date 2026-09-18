@@ -52,7 +52,8 @@ class HjcosaConverter : HijriConverter {
             val p = gregorian.split('-')
             return CivilDate(p[2].toInt(), p[1].toInt(), p[0].toInt())
         }
-        val jd = JulianDayMath.hijriToJd(year, month, day, adjust = adjustment)
-        return JulianDayMath.jdToGregorian(jd)
+        // No announcement for this date: the Umm al-Qura table, the same one
+        // fromGregorian falls back to.
+        return uaq.toGregorian(year, month, day, adjustment)
     }
 }
