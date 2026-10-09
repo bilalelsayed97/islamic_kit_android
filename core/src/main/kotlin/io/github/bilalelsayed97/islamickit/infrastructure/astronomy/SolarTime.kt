@@ -109,9 +109,17 @@ class SolarTime @JvmOverloads constructor(
      * Time at which an object's shadow has grown by [shadowFactor] times its
      * own length beyond its shadow at transit — the Asr definition (1 for
      * Shafi'i/Maliki/Hanbali, 2 for Hanafi). Fractional UTC hours.
+     *
+     * The shadow at transit is taken from the sun's declination interpolated
+     * to the moment of transit. Sampling it at 0h UTC instead (as the Adhan
+     * library does) leaves it up to a day's fraction stale, which moves Asr
+     * by as much as half a minute near the equinoxes.
      */
     fun afternoon(shadowFactor: Double): Double {
-        val tangent = abs(coordinates.latitude - solar.declination)
+        val transitDeclination = Astronomical.interpolate(
+            solar.declination, previous.declination, next.declination, transit / 24,
+        )
+        val tangent = abs(coordinates.latitude - transitDeclination)
         val inverse = shadowFactor + Astronomical.tan(tangent)
         return hourAngle(Astronomical.arctan(1.0 / inverse), afterTransit = true)
     }

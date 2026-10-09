@@ -86,12 +86,16 @@ class MethodTableTest {
                 CalculationMethod.KARACHI,
                 CalculationMethod.ISNA,
                 CalculationMethod.MWL,
-                CalculationMethod.EGYPT,
                 CalculationMethod.SINGAPORE,
             )
             for (method in plusOne) {
                 assertEquals(1, method.params.adjustments.dhuhr, method.code)
             }
+        }
+
+        @Test
+        fun `Egypt publishes Dhuhr at the zenith`() {
+            assertTrue(CalculationMethod.EGYPT.params.adjustments.isEmpty)
         }
 
         @Test

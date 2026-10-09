@@ -70,6 +70,37 @@ class PrayerTimesTest {
         }
     }
 
+    // Transit is 12:42:20, published as is. Asr is 16:01:34 with the
+    // declination taken at transit; the 0h UTC value gave 16:01:15.
+    @Nested
+    inner class EgyptianCairo {
+        private val result = service.timings(
+            CivilDate(2026, 10, 9),
+            Coordinates(30.0444196, 31.2357116),
+            CalculationParameters(
+                method = CalculationMethod.EGYPT,
+                utcOffset = UtcOffset.ofHours(3), // Africa/Cairo, EEST
+            ),
+        )
+
+        @TestFactory
+        fun `Dhuhr at the zenith and Asr from the transit declination`(): List<DynamicTest> {
+            val expected = linkedMapOf(
+                Prayer.FAJR to "05:27",
+                Prayer.SUNRISE to "06:53",
+                Prayer.DHUHR to "12:42",
+                Prayer.ASR to "16:02",
+                Prayer.MAGHRIB to "18:31",
+                Prayer.ISHA to "19:48",
+            )
+            return expected.map { (prayer, time) ->
+                DynamicTest.dynamicTest("${prayer.key} == $time") {
+                    assertEquals(time, result.formatted(prayer, TimeFormat.H24))
+                }
+            }
+        }
+    }
+
     @Nested
     inner class IsnaLondon24h {
         private val result = service.timings(CivilDate(2014, 4, 24), london, londonParams)

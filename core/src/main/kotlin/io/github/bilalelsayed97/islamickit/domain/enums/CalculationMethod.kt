@@ -57,7 +57,7 @@ enum class CalculationMethod(
         5,
         "EGYPT",
         "Egyptian General Authority of Survey",
-        MethodParams(fajrAngle = 19.5, ishaAngle = 17.5, adjustments = MethodAdjustments(dhuhr = 1), location = Coordinates(30.0444196, 31.2357116)),
+        MethodParams(fajrAngle = 19.5, ishaAngle = 17.5, location = Coordinates(30.0444196, 31.2357116)),
     ),
     TEHRAN(
         7,
