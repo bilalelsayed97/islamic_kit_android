@@ -4,6 +4,11 @@ All notable changes to this library are documented here. The version's
 major.minor tracks the Dart `islamic_kit_plus` engine it reproduces; the
 patch component is independent.
 
+## 0.3.3
+
+Version alignment only — no code change. Brings the version number level with
+`islamic_kit_swift` 0.3.3, which carries the same engine as 0.3.2 here.
+
 ## 0.3.2
 
 ### Fixed
