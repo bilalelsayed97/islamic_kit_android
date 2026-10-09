@@ -118,10 +118,10 @@ dependencyResolutionManagement {
 // build.gradle.kts (module)
 dependencies {
     // Prayer times, Hijri calendar, qibla, calendars, aladhan JSON, EN/AR labels:
-    implementation("com.github.bilalelsayed97.islamic_kit_android:core:0.3.1")
+    implementation("com.github.bilalelsayed97.islamic_kit_android:core:0.3.2")
 
     // Only where you need the bundled city database (brings :core with it):
-    implementation("com.github.bilalelsayed97.islamic_kit_android:geocoding:0.3.1")
+    implementation("com.github.bilalelsayed97.islamic_kit_android:geocoding:0.3.2")
 }
 ```
 
@@ -168,8 +168,8 @@ If you only need prayer times for coordinates you already have, depend on
 
 | Artifact | Type | Use it for |
 |---|---|---|
-| `…:core:0.3.1` | Kotlin/JVM jar | The full core API: prayer times, Hijri calendar, qibla, calendars, aladhan JSON, EN/AR labels, `LocationDefaults`, and the curated 103‑city offline geocoder. No Android SDK, no database, no SQLite. |
-| `…:geocoding:0.3.1` | Android AAR (`api` dependency on `:core`) | Everything above **plus** `BundledCityDatabase`, `SqliteCityGeocoder` and `SqliteCityDirectory`, which read the bundled 37 MB `prayer_times.db`. Add it only to modules that need by‑city / by‑address lookups, city pickers or reverse geocoding. |
+| `…:core:0.3.2` | Kotlin/JVM jar | The full core API: prayer times, Hijri calendar, qibla, calendars, aladhan JSON, EN/AR labels, `LocationDefaults`, and the curated 103‑city offline geocoder. No Android SDK, no database, no SQLite. |
+| `…:geocoding:0.3.2` | Android AAR (`api` dependency on `:core`) | Everything above **plus** `BundledCityDatabase`, `SqliteCityGeocoder` and `SqliteCityDirectory`, which read the bundled 37 MB `prayer_times.db`. Add it only to modules that need by‑city / by‑address lookups, city pickers or reverse geocoding. |
 
 Everything lives under the package `io.github.bilalelsayed97.islamickit`
 (abbreviated `…islamickit` below):
@@ -535,7 +535,7 @@ as "adjustments"; they apply before your own `tune` offsets.
 |---|---|---|---|
 | `MWL` — Muslim World League | 18° | 17° | Dhuhr +1 |
 | `ISNA` — Islamic Society of North America | 15° | 15° | Dhuhr +1 |
-| `EGYPT` — Egyptian General Authority of Survey | 19.5° | 17.5° | Dhuhr +1 |
+| `EGYPT` — Egyptian General Authority of Survey | 19.5° | 17.5° | |
 | `MAKKAH` — Umm al‑Qura, Makkah | 18.5° | 90 min (**120 in Ramadan**) | |
 | `KARACHI` — University of Islamic Sciences | 18° | 18° | Dhuhr +1 |
 | `TEHRAN` — University of Tehran | 17.7° | 14° (Maghrib 4.5°) | |
@@ -1075,7 +1075,7 @@ geocoding/                                  # com.github.…:geocoding — Andro
 ./gradlew :core:test                     # 26,772 JUnit 5 tests, a few seconds, no Android SDK needed
 ./gradlew :core:test --tests '*Conformance*'   # only the cross-language fixtures
 ./gradlew :geocoding:testDebugUnitTest   # 36 Robolectric tests against the real 37 MB database
-./gradlew publishToMavenLocal            # what JitPack runs: core-0.3.1.jar + geocoding-0.3.1.aar
+./gradlew publishToMavenLocal            # what JitPack runs: core-0.3.2.jar + geocoding-0.3.2.aar
 ```
 
 The build needs JDK 17 and, for `:geocoding`, Android SDK platform 36. The
